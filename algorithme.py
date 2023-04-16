@@ -63,7 +63,7 @@ def average_ll(ll):
 
 
 def return_stem(sentence):
-    doc = st.session_state.nlp(sentence)
+    doc = nlp(sentence)
     return [stemmer.stem(X.text) for X in doc]
 
 
@@ -279,6 +279,48 @@ class Conversion():
         self.spe_unity_fix()
         self.other_unity_fix()
 
+    def get_pair(self, prod, l_comp):
+
+      # VARIABLES 
+      coff_val = 1.0 
+      pairs = [] 
+      b_pair = "" 
+      found = False
+      stemmed_prod = return_stem(prod)
+
+      # PROCESS
+      while not pairs and coff_val >= 0 and found == False:
+
+        pairs = difflib.get_close_matches(prod, l_comp, cutoff=coff_val)
+
+        # SI ON A QQCH ON CHERCHE LE BON ITEM
+        if pairs:
+
+          # STEMMING + COMPARAISON
+          pairs_set_score = []
+          for i in range(len(pairs)):
+            stemmed_item = return_stem(pairs[i])
+
+            # LISTE DE SCORES DE RESSEMBLANCE
+            pairs_set_score.append(len(set(stemmed_prod).intersection(stemmed_item)))
+
+          # MEILLEURS ITEMS > 0
+          if max(pairs_set_score) > 0:
+            b_pair = pairs[pairs_set_score.index(max(pairs_set_score))]
+            found = True
+            break # On a mis found à True mais la boucle while ne se stoppe pas automatiquement, il faut break en plus
+
+          # MOINS EXIGENT SI TOUT EST A 0
+          else:
+            coff_val -= 0.1
+            pairs = []
+
+        # MOINS EXIGENT SI AUCUN MATCH
+        else:
+          coff_val -= 0.1
+
+      return b_pair
+
     def no_unity_fix(self): # noms de fonctions explicites
         for i in range(len(self.rd_d)):
             if not self.rd_d[i]["Unity"]:
@@ -286,7 +328,7 @@ class Conversion():
                 coeff_q = self.rd_d[i]["Quantity"][0]
                 self.rd_d[i]["Quantity"] = []
                 try:
-                    self.rd_d[i]["Quantity"].append(self.dict_poids[get_pair(self.rd_d[i]["Product"], self.dict_poids.keys())] * coeff_q)
+                    self.rd_d[i]["Quantity"].append(self.dict_poids[self.get_pair(self.rd_d[i]["Product"], self.dict_poids.keys())] * coeff_q)
                 except:
                     pass
         return self.rd_d
@@ -321,9 +363,10 @@ class Conversion():
     
 
 class Calcul():
-    def __init__(self, rd_d_f, nutriments):
+    def __init__(self, rd_d_f, nutriments, pairs_infos):
         self.rd_d_f = rd_d_f
         self.nutriments = nutriments
+        self.pairs_infos = pairs_infos
         self.recette_table = self.table_blanche()
         self.all_rows = []
         for i in range(len(rd_d_f)):
@@ -342,7 +385,7 @@ class Calcul():
             self.all_rows[i].append(self.rd_d_f[i]["Product"])
 
             coeff_100_g = self.rd_d_f[i]["Quantity"][0] / 100
-            index_nutrition = pairs_infos[i]["Index"][0]
+            index_nutrition = self.pairs_infos[i]["Index"][0]
 
             if index_nutrition != "N":
                 for k, v in self.nutriments.items():
@@ -593,6 +636,6 @@ def all(ingredients):
   recette_decoupee_dict_fixed = Conversion(recette_decoupee_dict, dict_poids)
   recette_decoupee_dict_fixed = recette_decoupee_dict_fixed.convert()
 
-  resultat = Calcul(recette_decoupee_dict_fixed, nutriments)
+  resultat = Calcul(recette_decoupee_dict_fixed, nutriments, pairs_infos)
 
   return resultat.recette_table

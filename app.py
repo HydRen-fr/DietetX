@@ -12,7 +12,7 @@ def index():
         # et qui renvoie une table PrettyTable
         table = algorithme.all(ingredients)
         
-        return render_template('index.html', table=table)
+        return render_template('index.html', table=table.get_html_string(attributes = {"class": "table"}))
     
     return render_template('index.html')
 
