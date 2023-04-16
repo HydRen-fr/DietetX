@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ingrédients</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+  </head>
+  <body>
+    <h1>Ingrédients</h1>
+    <form action="/" method="post">
+      <label for="ingredients">Entrez les ingrédients</label>
+      <input type="text" name="ingredients" id="ingredients">
+      <input type="submit" value="Submit">
+    </form>
+    {% if table %}
+    <h1>Table</h1>
+    {{ table }}
+    {% endif %}
+  </body>
+</html>
