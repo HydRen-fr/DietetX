@@ -382,7 +382,7 @@ class Calcul():
         return self.recette_table
 
 
-food_df = pandas.read_excel('/static/files/Table Ciqual 2020.xls')
+food_df = pandas.read_excel('static/files/Table_Ciqual_2020.xls')
 Products_info = food_df.to_dict('records') # Liste de dictionnaires
 
 # Aliments aux noms trop longs et mal reconnaissables
@@ -476,7 +476,7 @@ for k, v in nutriments.items(): # SOTCKES ET NETTOYES DANS DES LISTES
   v_pas_clean = MenageListNutri(v)
   v = v_pas_clean.clean_list_nutri
         
-poids_df = pandas.read_excel('/static/files/poids_moyen_g.ods')
+poids_df = pandas.read_excel('static/files/poids_moyen_g.ods')
 dict_poids = poids_df.set_index('nom_aliment').to_dict()['poids_moyen']
 
 
