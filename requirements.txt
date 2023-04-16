@@ -8,4 +8,5 @@ defusedxml==0.7.1
 xlrd >= 1.0.0
 spacy>=3.0.0,<4.0.0
 Flask==2.2.0
+gunicorn==19.7.1
 ./fr_core_news_sm-3.3.0.tar.gz
