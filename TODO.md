@@ -1,0 +1,2 @@
+- Meilleure nettoyage de newFood
+- Liste de poids moyens plus complète

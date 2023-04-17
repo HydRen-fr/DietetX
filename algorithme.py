@@ -162,12 +162,12 @@ class MenageListFood():
     # Même idée MAIS on part directement de la liste bien tokenizée et on n'enlève les précisions inutiles
     self.rmpls2 = {"(?!\b[^\w\s]\b)[^\w\s '’ - ]":"", 
               "œ":"oe", # E DANS L'O
-              "['’ - ]":" "}
+              "[%'’ - ]":" "}
 
     self.pas_normaliser2 = ["maïs"]
 
     self.pres2 = ("appertis", "preemball", "rechauff", "reconstit", "cuit", "fait", "maison", "surgel", "fraich", "denoyaut", "egoutt", "nature", "enrichi")
-    self.entire_pres2 = ["frais", "pulpe", "cru", "crue", "peau", "pepin", "pepins"]
+    self.entire_pres2 = ["frais", "pulpe", "cru", "crue", "peau", "pepin", "pepins", "sale", "salee", "mg", "matiere", "grasse", "rayon", "precision"]
     self.list_food = list_food
 
     self.clean_list_food = self.menage2()
@@ -268,10 +268,11 @@ class Isolation():
     return self.rd_d
   
 class Conversion():
-    def __init__(self, rd_d, dict_poids):
+    def __init__(self, rd_d, dict_poids, pairs_infos):
         self.rd_d = copy.deepcopy(rd_d)
         self.spe_units_conversion = {"qirc":5, "qirs":15, "louche":150, "verre":180, "tasse":130, "bol":280}
         self.other_units_conversion = {"ml":1,"cl":10, "l":1000, "kg":1000}
+        self.pairs_infos = pairs_infos
 
         self.dict_poids = dict_poids
 
@@ -330,7 +331,7 @@ class Conversion():
                 try:
                     self.rd_d[i]["Quantity"].append(self.dict_poids[self.get_pair(self.rd_d[i]["Product"], self.dict_poids.keys())] * coeff_q)
                 except:
-                    pass
+                    self.pairs_infos[i]["Index"][0] = "N"
         return self.rd_d
 
     def spe_unity_fix(self):
@@ -383,11 +384,12 @@ class Calcul():
     def get_rows_ll(self):
         for i in range(len(self.rd_d_f)):
             self.all_rows[i].append(self.rd_d_f[i]["Product"])
-
-            coeff_100_g = self.rd_d_f[i]["Quantity"][0] / 100
+              
             index_nutrition = self.pairs_infos[i]["Index"][0]
 
             if index_nutrition != "N":
+                coeff_100_g = self.rd_d_f[i]["Quantity"][0] / 100
+            
                 for k, v in self.nutriments.items():
                     try:
                         self.all_rows[i].append(round(float(v[index_nutrition]) * coeff_100_g, 2))
@@ -633,7 +635,8 @@ def all(ingredients):
   pairage()
 
 
-  recette_decoupee_dict_fixed = Conversion(recette_decoupee_dict, dict_poids)
+  recette_decoupee_dict_fixed = Conversion(recette_decoupee_dict, dict_poids, pairs_infos)
+  pairs_infos = recette_decoupee_dict_fixed.pairs_infos
   recette_decoupee_dict_fixed = recette_decoupee_dict_fixed.convert()
 
   resultat = Calcul(recette_decoupee_dict_fixed, nutriments, pairs_infos)
