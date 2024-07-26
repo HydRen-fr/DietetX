@@ -1,6 +1,6 @@
 # DietetX
 
-DietetX est un convertisseur d'ingrédients en nutriments pour les recettes françaises.
+DietetX is an ingredient-to-nutrient converter for French recipes.
 
 ## Usage
 
