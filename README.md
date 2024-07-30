@@ -2,7 +2,7 @@
 
 ![Logo](/static/leaf_logo.png)
 
-[**DietetX**](https://dietetx.onrender.com/) is an ingredient-to-nutrient converter for French recipes.
+[**DietetX**](https://dietetx.onrender.com/) (wait 30 seconds for the website to load the first time) is an ingredient-to-nutrient converter for French recipes.
 
 This is the first project I made, back in 2020-2021, when I was 14 years old and still in middle school. I'm proud of it, I was doing natural language processing before I even knew it was a thing.
 It's also the first website I created. Anyway, I'll try to add a very simple authentification system, so that we can save the results of the conversion, etc.
