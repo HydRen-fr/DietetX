@@ -1,7 +1,8 @@
 # DietetX
 
 ![Logo](/static/leaf_logo.png)
-[**DietetX**](https://dietetx.onrender.com/) is an ingredient-to-nutrient converter for French recipes.
+
+> [**DietetX**](https://dietetx.onrender.com/) is an ingredient-to-nutrient converter for French recipes.
 
 ## Usage
 
