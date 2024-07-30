@@ -1,4 +1,4 @@
-# DietetX
+# 🍪 DietetX 🔍
 
 ![Logo](/static/leaf_logo.png)
 
